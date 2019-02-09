@@ -10,9 +10,11 @@ local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 # prompt segment shape: arrow or square
 if $is_ssh
 then
-    SEGMENT_SEPARATOR=$'\ue0b0'
+    SEGMENT_SEPARATOR_L=$'\ue0b0'
+    SEGMENT_SEPARATOR_R=$''
 else
-    SEGMENT_SEPARATOR=$''
+    SEGMENT_SEPARATOR_L=$''
+    SEGMENT_SEPARATOR_R=$''
 fi
 }
 
@@ -122,11 +124,12 @@ prompt_status() {
 
 
 ##### vi mode
-VIM_PROMPT="--INSERT--"
-export KEYTIMEOUT=1
+#VIM_PROMPT="--INSERT--"
+export KEYTIMEOUT=1	# reduce delay to 0.1s
 bindkey -v
 prompt_vi(){
-    prompt_segment default white $VIM_PROMPT
+    # only add to prompt if not empty
+    [[ -n $VIM_PROMPT ]] && prompt_segment default white $VIM_PROMPT
 }
 zle-line-init() { zle -K viins; }
 zle -N zle-line-init
@@ -135,6 +138,7 @@ zle -N zle-line-init
 ## Main left prompt
 build_prompt() {
     RETVAL=$?
+    local SEGMENT_SEPARATOR=$SEGMENT_SEPARATOR_L
     prompt_context
     prompt_dir
     prompt_mes
@@ -143,6 +147,7 @@ build_prompt() {
 
 build_rprompt() {
     RETVAL=$?
+    local SEGMENT_SEPARATOR=$SEGMENT_SEPARATOR_R
     prompt_virtualenv
     prompt_vi
     prompt_git
@@ -154,18 +159,18 @@ RPROMPT='%{%f%b%k%}$(build_rprompt)'
 
 # redraw prompt on mode changes
 zle-keymap-select() {
-if [ $KEYMAP = vicmd ]; then
-    printf "\033[2 q" # block cursor
-    VIM_PROMPT="-- NORMAL --"
-else
-    printf "\033[4 q" # underline. Change 4 to 6 for vertical line
-    VIM_PROMPT=""
-fi
+    if [ $KEYMAP = vicmd ]; then
+	printf "\033[2 q" # block cursor
+	VIM_PROMPT="-- NORMAL --"
+    else
+	printf "\033[4 q" # underline. Change 4 to 6 for vertical line
+	VIM_PROMPT=""
+    fi
 
-PROMPT='%{%f%b%k%}$(build_prompt) '
-RPROMPT='%{%f%b%k%}$(build_rprompt)'
-zle reset-prompt
-zle -R
+    PROMPT='%{%f%b%k%}$(build_prompt) '
+    RPROMPT='%{%f%b%k%}$(build_rprompt)'
+    zle reset-prompt
+    zle -R
 }
 zle -N zle-keymap-select
 
