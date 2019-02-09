@@ -4,82 +4,77 @@
 CURRENT_BG='NONE'
 
 # Special Powerline characters
-
 () {
-  local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-  # NOTE: This segment separator character is correct.  In 2012, Powerline changed
-  # the code points they use for their special characters. This is the new code point.
-  # If this is not working for you, you probably have an old version of the
-  # Powerline-patched fonts installed. Download and install the new version.
-  # Do not submit PRs to change this unless you have reviewed the Powerline code point
-  # history and have new information.
-  # This is defined using a Unicode escape sequence so it is unambiguously readable, regardless of
-  # what font the user is viewing this source code in. Do not replace the
-  # escape sequence with a single literal character.
-  # Do not change this! Do not make it '\u2b80'; that is the old, wrong code point.
-  #SEGMENT_SEPARATOR=$'\ue0b0'
-  SEGMENT_SEPARATOR=$''
+local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+
+# prompt segment shape: arrow or square
+if $is_ssh
+then
+    SEGMENT_SEPARATOR=$'\ue0b0'
+else
+    SEGMENT_SEPARATOR=$''
+fi
 }
 
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
 prompt_segment() {
-  local bg fg
-  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
-  else
-    echo -n "%{$bg%}%{$fg%} "
-  fi
-  CURRENT_BG=$1
-  [[ -n $3 ]] && echo -n $3
+    local bg fg
+    [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+    [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+    if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+	echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+    else
+	echo -n "%{$bg%}%{$fg%} "
+    fi
+    CURRENT_BG=$1
+    [[ -n $3 ]] && echo -n $3
 }
 
 # End the prompt, closing any open segments
 prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
-  else
-    echo -n "%{%k%}"
-  fi
-  echo -n "%{%f%}"
-  CURRENT_BG=''
+    if [[ -n $CURRENT_BG ]]; then
+	echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    else
+	echo -n "%{%k%}"
+    fi
+    echo -n "%{%f%}"
+    CURRENT_BG=''
 }
 
 prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
-  fi
+    if $is_ssh; then
+	prompt_segment green black "%(!.%{%F{yellow}%}.)$USER@$HOST"
+    fi
 }
 
 prompt_git() {
-  (( $+commands[git] )) || return
-  local PL_BRANCH_CHAR
-  () {
+    (( $+commands[git] )) || return
+    local PL_BRANCH_CHAR
+    () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
     #PL_BRANCH_CHAR=$'\ue0a0'         # 
     PL_BRANCH_CHAR=$''
-  }
-  local ref dirty mode repo_path
-  repo_path=$(git rev-parse --git-dir 2>/dev/null)
+}
+local ref dirty mode repo_path
+repo_path=$(git rev-parse --git-dir 2>/dev/null)
 
-  if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+	prompt_segment yellow black
     else
-      prompt_segment green black
+	prompt_segment green black
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
+	mode=" <B>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
+	mode=" >M<"
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
+	mode=" >R>"
     fi
 
     setopt promptsubst
@@ -94,35 +89,35 @@ prompt_git() {
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
     echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
-  fi
+fi
 }
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment magenta black '%3~'
+    prompt_segment magenta black '%3~'
 }
 
 prompt_mes() {
-  [[ $RETVAL -ne 0 ]] && prompt_segment red black '>'
-  [[ $RETVAL -eq 0 ]] && prompt_segment blue black '>'
+    [[ $RETVAL -ne 0 ]] && prompt_segment red black '>'
+    [[ $RETVAL -eq 0 ]] && prompt_segment blue black '>'
 }
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
-  local virtualenv_path="$VIRTUAL_ENV"
-  if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-    prompt_segment red black "(`basename $virtualenv_path`)"
-  fi
+    local virtualenv_path="$VIRTUAL_ENV"
+    if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
+	prompt_segment red black "(`basename $virtualenv_path`)"
+    fi
 }
 
 prompt_status() {
-  local symbols
-  symbols=()
-  [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}x"
-  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+    local symbols
+    symbols=()
+    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}x"
+    [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
+    [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+    [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
 
@@ -139,18 +134,19 @@ zle -N zle-line-init
 
 ## Main left prompt
 build_prompt() {
-  RETVAL=$?
-  prompt_dir
-  prompt_mes
-  prompt_end
+    RETVAL=$?
+    prompt_context
+    prompt_dir
+    prompt_mes
+    prompt_end
 }
 
 build_rprompt() {
-  RETVAL=$?
-  prompt_virtualenv
-  prompt_vi
-  prompt_git
-  prompt_end
+    RETVAL=$?
+    prompt_virtualenv
+    prompt_vi
+    prompt_git
+    prompt_end
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
@@ -158,18 +154,18 @@ RPROMPT='%{%f%b%k%}$(build_rprompt)'
 
 # redraw prompt on mode changes
 zle-keymap-select() {
-    if [ $KEYMAP = vicmd ]; then
-	printf "\033[2 q" # block cursor
-	VIM_PROMPT="-- NORMAL --"
-    else
-	printf "\033[4 q" # underline. Change 4 to 6 for vertical line
-	VIM_PROMPT=""
-    fi
+if [ $KEYMAP = vicmd ]; then
+    printf "\033[2 q" # block cursor
+    VIM_PROMPT="-- NORMAL --"
+else
+    printf "\033[4 q" # underline. Change 4 to 6 for vertical line
+    VIM_PROMPT=""
+fi
 
-    PROMPT='%{%f%b%k%}$(build_prompt) '
-    RPROMPT='%{%f%b%k%}$(build_rprompt)'
-    zle reset-prompt
-    zle -R
+PROMPT='%{%f%b%k%}$(build_prompt) '
+RPROMPT='%{%f%b%k%}$(build_rprompt)'
+zle reset-prompt
+zle -R
 }
 zle -N zle-keymap-select
 
@@ -191,3 +187,5 @@ zle -N zle-keymap-select
 #ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}~"
 #ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%}><"
 #ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}**"
+
+# vim:ft=sh
