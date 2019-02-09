@@ -35,3 +35,9 @@ so $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 TRAPWINCH () {
     zle &&  zle -R
 }
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    export is_ssh=true
+else
+    export is_ssh=false
+fi
