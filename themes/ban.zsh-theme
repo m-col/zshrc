@@ -124,16 +124,22 @@ prompt_status() {
 }
 
 
+if $is_ssh
+then
+    tmux_following_colour=green
+else
+    tmux_following_colour=magenta
+fi
 prompt_tmux() {
     local tmux_indicator
+    local SEGMENT_SEPARATOR=''
     if [[ -n "$TMUX" ]]
     then
-	prompt_segment 11 magenta ''
-	SEGMENT_SEPARATOR=$'\ue0b0' prompt_segment magenta 11 ''
+	tmux_indicator=$'\ue0b0'
     else
-	prompt_segment black magenta ''
-	SEGMENT_SEPARATOR='' prompt_segment magenta 11 ''
+	tmux_indicator=''
     fi
+    [[ -n "$tmux_indicator" ]] && prompt_segment $tmux_following_colour 11 "$tmux_indicator"
 }
 
 
