@@ -15,7 +15,7 @@ ZSH_COMPDUMP="$HOME/.zcompdump"
 HISTFILE="$HOME/.zsh_history"
 bindkey '^A' autosuggest-execute
 
-for plugin ($ZSH/oh-my-zsh/*.zsh $ZSH/*.zsh)
+for plugin ($ZSH/oh-my-zsh/*.zsh $ZSH/*.zsh(N))
 do
     source $plugin
 done
