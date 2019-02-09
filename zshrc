@@ -40,3 +40,7 @@ so $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 TRAPWINCH () {
     zle &&  zle -R
 }
+
+# these are needed for some unicode to work (e.g. in tmux)
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
