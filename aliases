@@ -1,0 +1,107 @@
+#
+# General aliases go here
+# Machine-specific aliases go in $HOME/.aliases
+#
+
+# misc
+alias ..='cd ../'
+alias ...='cd ../../'
+alias l='ls -alhF'
+alias lc='ls -c1'
+alias q="exit"
+alias :q="exit"
+alias tmp="cd /tmp; l"
+alias _="sudo"
+
+# networking
+alias eduroam='nmcli con up eduroam'
+alias pinga='ping archlinux.org'
+alias ip="ip -c"
+
+# launchers
+alias ra="ranger"
+alias vi="vim"
+
+# git
+alias gs="git status"
+alias ad="git add"
+alias cm="git commit -m"
+alias psh="git push"
+alias pshu="git push --set-upstream"
+alias pl="git pull"
+alias grm="git rm"
+alias br="git branch"
+alias ch="git checkout"
+
+# tools
+alias usync="rsync -avPzh --delete"
+alias cl='clear; cd $HOME'
+alias sc="sudo systemctl"
+alias removespaces="for run in {1..20}; do; find . -type f -name \"* *\" -exec rename \" \" \"_\" {} \; ; done"
+
+# quick edits
+alias modalia='vim $HOME/.aliases && source $HOME/.aliases'
+alias vimrc='vim $HOME/.vim/bundle/vim-misc/vimrc'
+alias vimkeys='vim $HOME/.vim/bundle/vim-misc/plugin/keybindings.vim'
+alias modtux='vim $HOME/.vim/bundle/vim-misc/tmux.conf'
+alias zshrc='vim $HOME/.zsh/zshrc'
+alias modrc='vim $HOME/.config/ranger/rc.conf'
+
+# shortcuts
+alias gh='cd $HOME; ls'
+alias gd='cd $HOME/documents'
+alias gD='cd $HOME/Downloads'
+alias ge='cd /etc'
+alias gv='cd $HOME/.vim; ranger'
+alias gvm='cd $HOME/.vim/bundle/vim-misc; ra'
+alias gz='cd $HOME/.zsh; l'
+
+
+# colourise man pages
+function man() {
+    env \
+	LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+	LESS_TERMCAP_md=$(printf "\e[1;31m") \
+	LESS_TERMCAP_me=$(printf "\e[0m") \
+	LESS_TERMCAP_se=$(printf "\e[0m") \
+	LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+	LESS_TERMCAP_ue=$(printf "\e[0m") \
+	LESS_TERMCAP_us=$(printf "\e[1;32m") \
+	PAGER="${commands[less]:-$PAGER}" \
+	_NROFF_U=1 \
+	PATH="$HOME/bin:$PATH" \
+	man "$@"
+}
+
+# use last browsed directory automatically with ranger
+ranger-cd() { 
+    tempfile="$(mktemp -t tmp.XXXXXX)"
+    if [[ -f /usr/local/bin/ranger ]]
+    then
+	/usr/local/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    else
+	/usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    fi
+    test -f "$tempfile" &&
+	if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+	    cd -- "$(cat "$tempfile")"
+	fi
+	rm -f -- "$tempfile"
+}
+ranger() { # prevent nested ranger instances when shelling from ranger
+    if [ -z "$RANGER_LEVEL" ]; then
+	ranger-cd "$@"
+    else
+	exit
+    fi
+}
+
+
+shebang() { # create new file, add shebang, and vim
+    touch $1
+    chmod +x $1
+    echo -e "#!/usr/bin/env bash\n" > $1
+    vim +2 $1
+}
+
+# vim: ft=sh

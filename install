@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+dir=$(dirname "$(readlink -f "$0")")
+
+# source this zshrc from ~/.zshrc
+echo "source $dir/zshrc" >> $HOME/.zshrc
+
+# we may need a config directory for a plugin
+[[ ! -d $HOME/.config ]] && mkdir $HOME/.config
+
+# if installation didn't include submodules they need installing
+
