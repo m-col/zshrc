@@ -9,4 +9,5 @@ echo "source $dir/zshrc" >> $HOME/.zshrc
 [[ ! -d $HOME/.config ]] && mkdir $HOME/.config
 
 # if installation didn't include submodules they need installing
-
+git --git-dir=$dir/.git submodule init
+git --git-dir=$dir/.git submodule update
