@@ -21,6 +21,7 @@ alias ip="ip -c"
 # launchers
 alias ra="ranger"
 alias vi="vim"
+alias tmux="tmux -u"
 
 # git
 alias gs="git status"
@@ -55,6 +56,7 @@ alias ge='cd /etc'
 alias gv='cd $HOME/.vim; ranger'
 alias gvm='cd $HOME/.vim/bundle/vim-misc; ra'
 alias gz='cd $HOME/.zsh; l'
+alias gR='cd $HOME/reach'
 
 
 # colourise man pages
