@@ -128,13 +128,12 @@ prompt_tmux() {
     local tmux_indicator
     if [[ -n "$TMUX" ]]
     then
-	local SEGMENT_SEPARATOR_L=$'\ue0b0'
-	tmux_indicator=$''
+	prompt_segment 11 magenta ''
+	SEGMENT_SEPARATOR=$'\ue0b0' prompt_segment magenta 11 ''
     else
-	tmux_indicator=''
+	prompt_segment black magenta ''
+	SEGMENT_SEPARATOR='' prompt_segment magenta 11 ''
     fi
-    #[[ -n "$tmux_indicator" ]] && prompt_segment magenta 11 "$tmux_indicator"
-    prompt_segment 11 magenta "$tmux_indicator"
 }
 
 
