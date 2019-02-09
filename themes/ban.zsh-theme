@@ -26,9 +26,9 @@ prompt_segment() {
     [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
     [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
     if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-	echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+	echo -n "%{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%}"
     else
-	echo -n "%{$bg%}%{$fg%} "
+	echo -n "%{$bg%}%{$fg%}"
     fi
     CURRENT_BG=$1
     [[ -n $3 ]] && echo -n $3
@@ -37,7 +37,7 @@ prompt_segment() {
 # End the prompt, closing any open segments
 prompt_end() {
     if [[ -n $CURRENT_BG ]]; then
-	echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+	echo -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
     else
 	echo -n "%{%k%}"
     fi
@@ -47,7 +47,7 @@ prompt_end() {
 
 prompt_context() {
     if $is_ssh; then
-	prompt_segment green black "%(!.%{%F{yellow}%}.)$USER@$HOST"
+	prompt_segment green black " %(!.%{%F{yellow}%}.)$USER@$HOST "
     fi
 }
 
@@ -90,27 +90,29 @@ if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n " ${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode} "
 fi
 }
 
-# Dir: current working directory
+
 prompt_dir() {
-    prompt_segment magenta black '%3~'
+    prompt_segment magenta black ' %3~ '
 }
+
 
 prompt_mes() {
-    [[ $RETVAL -ne 0 ]] && prompt_segment red black '>'
-    [[ $RETVAL -eq 0 ]] && prompt_segment blue black '>'
+    [[ $RETVAL -ne 0 ]] && prompt_segment red black ' > '
+    [[ $RETVAL -eq 0 ]] && prompt_segment blue black ' > '
 }
 
-# Virtualenv: current working virtualenv
+
 prompt_virtualenv() {
     local virtualenv_path="$VIRTUAL_ENV"
     if [[ -n $virtualenv_path && -n $VIRTUAL_ENV_DISABLE_PROMPT ]]; then
-	prompt_segment red black "(`basename $virtualenv_path`)"
+	prompt_segment red black " (`basename $virtualenv_path`) "
     fi
 }
+
 
 prompt_status() {
     local symbols
@@ -118,13 +120,22 @@ prompt_status() {
     [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}x"
     [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
     [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
-
     [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
 }
 
 
-##### vi mode
-#VIM_PROMPT="--INSERT--"
+prompt_tmux() {
+    local tmux_indicator
+    if [[ -n "$TMUX" ]]
+    then
+	tmux_indicator=$'\ue0b0'
+    else
+	tmux_indicator=''
+    fi
+    [[ -n "$tmux_indicator" ]] && prompt_segment magenta 11 "$tmux_indicator"
+}
+
+
 export KEYTIMEOUT=1	# reduce delay to 0.1s
 bindkey -v
 prompt_vi(){
@@ -133,12 +144,13 @@ prompt_vi(){
 }
 zle-line-init() { zle -K viins; }
 zle -N zle-line-init
-######
+
 
 ## Main left prompt
 build_prompt() {
     RETVAL=$?
     local SEGMENT_SEPARATOR=$SEGMENT_SEPARATOR_L
+    prompt_tmux
     prompt_context
     prompt_dir
     prompt_mes
@@ -161,7 +173,7 @@ RPROMPT='%{%f%b%k%}$(build_rprompt)'
 zle-keymap-select() {
     if [ $KEYMAP = vicmd ]; then
 	printf "\033[2 q" # block cursor
-	VIM_PROMPT="-- NORMAL --"
+	VIM_PROMPT=" -- NORMAL -- "
     else
 	printf "\033[4 q" # underline. Change 4 to 6 for vertical line
 	VIM_PROMPT=""
