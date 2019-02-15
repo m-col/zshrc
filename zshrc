@@ -29,7 +29,7 @@ so $HOME/.aliases   # machine-specific aliases
 ZSH_THEME="ban"
 so $ZSH/themes/$ZSH_THEME.zsh-theme
 
-_Z_DATA=$HOME/.config/z
+_Z_DATA=$ZSH/z_data
 so $ZSH/z/z.sh
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)

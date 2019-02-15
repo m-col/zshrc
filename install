@@ -3,11 +3,23 @@
 dir=$(dirname "$(readlink -f "$0")")
 
 # source this zshrc from ~/.zshrc
-echo "source $dir/zshrc" >> $HOME/.zshrc
+if [[ -f ~/.zshrc ]]
+then
+	backup=~/.zshrc_$(date +%m%d-%H%M%S)
+	mv ~/.zshrc $backup
+	echo "Moved pre-existing ~/.zshrc to $backup"
+fi
+echo "source $dir/zshrc" > $HOME/.zshrc
+echo "Created new ~/.zshrc to source this repo"
 
-# we may need a config directory for a plugin
-[[ ! -d $HOME/.config ]] && mkdir $HOME/.config
 
 # if installation didn't include submodules they need installing
 git --git-dir=$dir/.git submodule init
 git --git-dir=$dir/.git submodule update
+
+
+# inform if zsh is not yet installed
+if ! type zsh 2> /dev/null
+then
+	echo "zsh is not installed on this system."
+fi
