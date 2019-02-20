@@ -42,6 +42,7 @@ alias removespaces="for run in {1..20}; do; find . -type f -name \"* *\" -exec r
 
 # quick edits
 alias modalia='vim $HOME/.aliases && source $HOME/.aliases'
+alias modaliaz='vim $ZSH/aliases && source $ZSH/aliases'
 alias vimrc='vim $HOME/.vim/bundle/vim-misc/vimrc'
 alias vimkeys='vim $HOME/.vim/bundle/vim-misc/plugin/keybindings.vim'
 alias modtux='vim $HOME/.vim/bundle/vim-misc/tmux.conf'
