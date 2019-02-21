@@ -23,3 +23,8 @@ if ! type zsh 2> /dev/null
 then
 	echo "zsh is not installed on this system."
 fi
+
+
+# symlink ranger config
+mkdir -p $HOME/.config/ranger
+ln -s $dir/rc.conf $HOME/.config/ranger/rc.conf

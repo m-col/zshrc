@@ -33,6 +33,7 @@ alias pl="git pull"
 alias grm="git rm"
 alias br="git branch"
 alias ch="git checkout"
+alias dif="git diff"
 
 # tools
 alias usync="rsync -avPzh --delete"
