@@ -8,7 +8,7 @@ CURRENT_BG='NONE'
 local LC_ALL="" LC_CTYPE="en_US.UTF-8"
 
 # prompt segment shape: arrow or square
-if $is_ssh
+if $IS_SSH
 then
     SEGMENT_SEPARATOR_L=$'\ue0b0'
     SEGMENT_SEPARATOR_R=$''
@@ -46,7 +46,7 @@ prompt_end() {
 }
 
 prompt_context() {
-    if $is_ssh; then
+    if $IS_SSH; then
 	prompt_segment green black " %(!.%{%F{yellow}%}.)$USER@$HOST "
     fi
 }
@@ -124,7 +124,7 @@ prompt_status() {
 }
 
 
-if $is_ssh
+if $IS_SSH
 then
     tmux_following_colour=green
 else
@@ -133,7 +133,7 @@ fi
 prompt_tmux() {
     local tmux_indicator
     local SEGMENT_SEPARATOR=''
-    if [[ -n "$TMUX" ]]
+    if $IS_TMUX
     then
 	tmux_indicator=$'\ue0b0'
     else
