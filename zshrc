@@ -16,13 +16,24 @@ else
     export IS_TMUX=false
 fi
 
+# zsh settings
 ZSH="$HOME/.zsh"
 HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 ZSH_COMPDUMP="$HOME/.zcompdump"
-HISTFILE="$HOME/.zsh_history"
-bindkey '^A' autosuggest-execute
+setopt CORRECT
 
+# zsh history
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=2000
+SAVEHIST=1000
+#setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+
+# plugins
+bindkey '^A' autosuggest-execute
 for plugin ($ZSH/oh-my-zsh/*.zsh $ZSH/*.zsh(N))
 do
     source $plugin
