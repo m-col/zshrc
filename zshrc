@@ -33,7 +33,6 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 
 # plugins
-bindkey '^A' autosuggest-execute
 for plugin ($ZSH/oh-my-zsh/*.zsh $ZSH/*.zsh(N))
 do
     source $plugin
@@ -52,6 +51,8 @@ so $ZSH/z/z.sh
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 so $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+bindkey '^A' autosuggest-execute
 
 export SUDO_EDITOR=vim
 export EDITOR=vim
