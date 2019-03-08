@@ -13,6 +13,18 @@ alias :q="exit"
 alias tmp="cd /tmp; l"
 alias _="sudo"
 
+# systemd
+alias sc='sudo systemctl'
+alias scs='sudo systemctl status'
+alias scsta='sudo systemctl start'
+alias scsto='sudo systemctl start'
+alias scrsta='sudo systemctl restart'
+alias sce='sudo systemctl enable'
+alias scen='sudo systemctl enable --now'
+alias scd='sudo systemctl disable'
+alias scdr='sudo systemctl daemon-reload'
+alias scc='sudo systemctl cat'
+
 # networking
 alias eduroam='nmcli con up eduroam'
 alias pinga='ping archlinux.org'
@@ -55,9 +67,12 @@ alias zshrc='vim $HOME/.zsh/zshrc'
 alias modrc='vim $HOME/.config/ranger/rc.conf'
 
 # shortcuts
+alias gc='cd $HOME/.config; l'
 alias gh='cd $HOME; ls'
 alias gd='cd $HOME/documents'
 alias gD='cd $HOME/Downloads'
+alias gg='cd $HOME/git; l'
+alias gb='cd $HOME/bin; ls'
 alias ge='cd /etc'
 alias gv='cd $HOME/.vim; ranger'
 alias gvm='cd $HOME/.vim/bundle/vim-misc; ra'
