@@ -14,16 +14,27 @@ alias tmp="cd /tmp; l"
 alias _="sudo"
 
 # systemd
-alias sc='sudo systemctl'
-alias scs='sudo systemctl status'
-alias scsta='sudo systemctl start'
-alias scsto='sudo systemctl start'
-alias scrsta='sudo systemctl restart'
-alias sce='sudo systemctl enable'
-alias scen='sudo systemctl enable --now'
-alias scd='sudo systemctl disable'
-alias scdr='sudo systemctl daemon-reload'
-alias scc='sudo systemctl cat'
+alias sc='systemctl'
+alias scs='systemctl status'
+alias scsta='systemctl start'
+alias scsto='systemctl start'
+alias scr='systemctl restart'
+alias sce='systemctl enable'
+alias scen='systemctl enable --now'
+alias scd='systemctl disable'
+alias scdr='systemctl daemon-reload'
+alias scc='systemctl cat'
+
+alias ssc='sudo systemctl'
+alias sscs='sudo systemctl status'
+alias sscsta='sudo systemctl start'
+alias sscsto='sudo systemctl start'
+alias sscr='sudo systemctl restart'
+alias ssce='sudo systemctl enable'
+alias sscen='sudo systemctl enable --now'
+alias sscd='sudo systemctl disable'
+alias sscdr='sudo systemctl daemon-reload'
+alias sscc='sudo systemctl cat'
 
 # networking
 alias eduroam='nmcli con up eduroam'

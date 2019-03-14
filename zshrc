@@ -21,13 +21,11 @@ ZSH="$HOME/.zsh"
 HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 ZSH_COMPDUMP="$HOME/.zcompdump"
-setopt CORRECT
 
 # zsh history
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=2000
 SAVEHIST=1000
-#setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
@@ -40,8 +38,9 @@ done
 
 so () { [[ -e $1 ]] && source $1 }
 
-so $ZSH/aliases	    # general aliases
-so $HOME/.aliases   # machine-specific aliases
+so $ZSH/aliases		    # general aliases
+so $HOME/.aliases	    # machine-specific aliases
+so $HOME/.config/aliases    # machine-specific aliases
 
 ZSH_THEME="ban"
 so $ZSH/themes/$ZSH_THEME.zsh-theme
