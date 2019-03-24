@@ -1,6 +1,6 @@
 #
 # General aliases go here
-# Machine-specific aliases go in $HOME/.aliases
+# Machine-specific aliases go in $HOME/.config/aliases
 #
 
 # misc
@@ -40,12 +40,11 @@ alias sscc='sudo systemctl cat'
 alias eduroam='nmcli con up eduroam'
 alias pinga='ping archlinux.org'
 alias ip="ip -c"
-alias ufw="sudo ufw"
 alias dns="cat /etc/resolv.conf"
-alias pinga='ping archlinux.org'
 
 # launchers
 alias ra="ranger"
+alias nc='ncmpcpp'
 alias vi="vim"
 alias tmux="tmux -u"
 alias ta="tmux attach"
@@ -64,12 +63,11 @@ alias dif="git diff"
 
 # tools
 alias usync="rsync -avPzh --delete"
-alias cl='clear; cd $HOME'
-alias sc="sudo systemctl"
+alias cl='clear'
 alias removespaces="for run in {1..20}; do; find . -type f -name \"* *\" -exec rename \" \" \"_\" {} \; ; done"
 
 # quick edits
-alias modalia='vim $HOME/.aliases && source $HOME/.aliases'
+alias modalia='vim $HOME/.config/aliases && source $HOME/.config/aliases'
 alias modaliaz='vim $ZSH/aliases && source $ZSH/aliases'
 alias vimrc='vim $HOME/.vim/bundle/vim-misc/vimrc'
 alias vimkeys='vim $HOME/.vim/bundle/vim-misc/plugin/keybindings.vim'

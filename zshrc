@@ -39,7 +39,6 @@ done
 so () { [[ -e $1 ]] && source $1 }
 
 so $ZSH/aliases		    # general aliases
-so $HOME/.aliases	    # machine-specific aliases
 so $HOME/.config/aliases    # machine-specific aliases
 
 ZSH_THEME="ban"
