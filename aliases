@@ -17,7 +17,7 @@ alias _="sudo"
 alias sc='systemctl'
 alias scs='systemctl status'
 alias scsta='systemctl start'
-alias scsto='systemctl start'
+alias scsto='systemctl stop'
 alias scr='systemctl restart'
 alias sce='systemctl enable'
 alias scen='systemctl enable --now'
@@ -25,10 +25,19 @@ alias scd='systemctl disable'
 alias scdr='systemctl daemon-reload'
 alias scc='systemctl cat'
 
+alias uscs='systemctl --user status'
+alias uscsta='systemctl --user start'
+alias uscsto='systemctl --user stop'
+alias uscr='systemctl --user restart'
+alias usce='systemctl --user enable'
+alias uscen='systemctl --user enable --now'
+alias uscd='systemctl --user disable'
+alias uscdr='systemctl --user daemon-reload'
+
 alias ssc='sudo systemctl'
 alias sscs='sudo systemctl status'
 alias sscsta='sudo systemctl start'
-alias sscsto='sudo systemctl start'
+alias sscsto='sudo systemctl stop'
 alias sscr='sudo systemctl restart'
 alias ssce='sudo systemctl enable'
 alias sscen='sudo systemctl enable --now'
@@ -45,7 +54,7 @@ alias dns="cat /etc/resolv.conf"
 # launchers
 alias ra="ranger"
 alias nc='ncmpcpp'
-alias vi="vim"
+alias v="vim"
 alias tmux="tmux -u"
 alias ta="tmux attach"
 
@@ -58,6 +67,7 @@ alias pshu="git push --set-upstream"
 alias pl="git pull"
 alias grm="git rm"
 alias br="git branch"
+alias brs="git branch -v"
 alias ch="git checkout"
 alias dif="git diff"
 
@@ -77,6 +87,7 @@ alias modrc='vim $HOME/.config/ranger/rc.conf'
 
 # shortcuts
 alias gc='cd $HOME/.config; l'
+alias gcs='cd $HOME/.config/systemd/user; ranger'
 alias gh='cd $HOME; ls'
 alias gd='cd $HOME/documents'
 alias gD='cd $HOME/Downloads'
