@@ -1,6 +1,6 @@
 my personal zsh env
 
-    git clone --recurse-submodules https://github.com/mcolligan/zshrc.git ~/.zsh
+    git clone --recurse-submodules https://github.com/mclgn/zshrc.git ~/.zsh
     ~/.zsh/install
 
 This appears to be required on raspberry pi:
