@@ -1,4 +1,10 @@
-### Segment drawing
+# vim:ft=zsh
+#
+# ban zsh theme
+#
+
+## Segment drawing
+
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
@@ -51,47 +57,41 @@ prompt_context() {
     fi
 }
 
+source $HOME/.zsh/gitstatus/gitstatus.plugin.zsh
+gitstatus_start MY
 prompt_git() {
-    (( $+commands[git] )) || return
     local PL_BRANCH_CHAR
     () {
-    local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    #PL_BRANCH_CHAR=$'\ue0a0'         # 
-    PL_BRANCH_CHAR=$''
-}
-local ref dirty mode repo_path
-repo_path=$(git rev-parse --git-dir 2>/dev/null)
+	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+	PL_BRANCH_CHAR=$'\ue0a0'
+    }
 
-if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    dirty=$(parse_git_dirty)
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
-    if [[ -n $dirty ]]; then
-	prompt_segment yellow black
+    gitstatus_query MY                  || return 1  # error
+    [[ $VCS_STATUS_RESULT == ok-sync ]] || return 0  # not a git repo
+
+    local     clean='%F{076}'  # green foreground
+    local untracked='%F{014}'  # teal foreground
+    local  modified='%F{011}'  # yellow foreground
+
+    local p
+    if (( VCS_STATUS_HAS_STAGED || VCS_STATUS_HAS_UNSTAGED )); then
+	p+=$modified
+    elif (( VCS_STATUS_HAS_UNTRACKED )); then
+	p+=$untracked
     else
-	prompt_segment green black
+	p+=$clean
     fi
+    p+=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}            # escape %
 
-    if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-	mode=" <B>"
-    elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-	mode=" >M<"
-    elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-	mode=" >R>"
-    fi
+    #[[ -n $VCS_STATUS_TAG               ]] && p+="#${VCS_STATUS_TAG//\%/%%}"  # escape %
+    [[ $VCS_STATUS_HAS_STAGED      == 1 ]] && p+="${modified}+"
+    [[ $VCS_STATUS_HAS_UNSTAGED    == 1 ]] && p+="${modified}!"
+    [[ $VCS_STATUS_HAS_UNTRACKED   == 1 ]] && p+="${untracked}?"
+    [[ $VCS_STATUS_COMMITS_AHEAD  -gt 0 ]] && p+="${clean} ⇡${VCS_STATUS_COMMITS_AHEAD}"
+    [[ $VCS_STATUS_COMMITS_BEHIND -gt 0 ]] && p+="${clean} ⇣${VCS_STATUS_COMMITS_BEHIND}"
+    #[[ $VCS_STATUS_STASHES        -gt 0 ]] && p+="${clean} *${VCS_STATUS_STASHES}"
 
-    setopt promptsubst
-    autoload -Uz vcs_info
-
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' get-revision true
-    zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '+'
-    zstyle ':vcs_info:*' unstagedstr '**'
-    zstyle ':vcs_info:*' formats ' %u%c'
-    zstyle ':vcs_info:*' actionformats ' %u%c'
-    vcs_info
-    echo -n " ${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode} "
-fi
+    prompt_segment default green "${p}"
 }
 
 
@@ -101,8 +101,12 @@ prompt_dir() {
 
 
 prompt_mes() {
-    [[ $RETVAL -ne 0 ]] && prompt_segment red black ' > '
-    [[ $RETVAL -eq 0 ]] && prompt_segment blue black ' > '
+    if [[ $RETVAL -ne 0 ]]
+    then
+	prompt_segment red black ' > '
+    else
+	prompt_segment blue black ' > '
+    fi
 }
 
 
@@ -130,16 +134,16 @@ then
 else
     tmux_following_colour=magenta
 fi
+if $IS_TMUX
+then
+    tmux_indicator=$'\ue0b0'
+else
+    tmux_indicator=''
+fi
 prompt_tmux() {
-    local tmux_indicator
     local SEGMENT_SEPARATOR=''
-    if $IS_TMUX
-    then
-	tmux_indicator=$'\ue0b0'
-    else
-	tmux_indicator=''
-    fi
-    [[ -n "$tmux_indicator" ]] && prompt_segment $tmux_following_colour 11 "$tmux_indicator"
+    [[ -n "$tmux_indicator" ]] || return 0
+    prompt_segment $tmux_following_colour 11 "$tmux_indicator"
 }
 
 
@@ -153,7 +157,6 @@ zle-line-init() { zle -K viins; }
 zle -N zle-line-init
 
 
-## Main left prompt
 build_prompt() {
     RETVAL=$?
     local SEGMENT_SEPARATOR=$SEGMENT_SEPARATOR_L
@@ -176,9 +179,9 @@ build_rprompt() {
 PROMPT='%{%f%b%k%}$(build_prompt) '
 RPROMPT='%{%f%b%k%}$(build_rprompt)'
 
-# redraw prompt on mode changes
+# redraw on mode change
 zle-keymap-select() {
-    if [ $KEYMAP = vicmd ]; then
+    if [[ $KEYMAP == vicmd ]]; then
 	printf "\033[2 q" # block cursor
 	VIM_PROMPT=" -- NORMAL -- "
     else
@@ -186,30 +189,7 @@ zle-keymap-select() {
 	VIM_PROMPT=""
     fi
 
-    PROMPT='%{%f%b%k%}$(build_prompt) '
-    RPROMPT='%{%f%b%k%}$(build_rprompt)'
     zle reset-prompt
     zle -R
 }
 zle -N zle-keymap-select
-
-#PROMPT='%{$FG[001]%}> %{$reset_color%}'
-#RPROMPT='%{$FG[001]%}%2~ $(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
-
-
-#ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}✗%{$reset_color%}"
-#ZSH_THEME_GIT_PROMPT_PREFIX="("
-#ZSH_THEME_GIT_PROMPT_SUFFIX=")"
-
-#ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[magenta]%}["
-#ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
-#ZSH_THEME_GIT_PROMPT_DIRTY=""
-#ZSH_THEME_GIT_PROMPT_CLEAN=""
-#ZSH_THEME_GIT_PROMPT_ADDED="%{$fg[cyan]%}+"
-#ZSH_THEME_GIT_PROMPT_MODIFIED="%{$fg[yellow]%}*"
-#ZSH_THEME_GIT_PROMPT_DELETED="%{$fg[red]%}x"
-#ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%}~"
-#ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%}><"
-#ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}**"
-
-# vim:ft=sh

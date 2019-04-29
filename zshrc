@@ -2,7 +2,7 @@
 # zshrc
 #
 
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]
+if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]
 then
     export IS_SSH=true
 else
@@ -38,8 +38,8 @@ done
 
 so () { [[ -e $1 ]] && source $1 }
 
-so $ZSH/aliases		    # general aliases
-so $HOME/.config/aliases    # machine-specific aliases
+so $ZSH/aliases		    # common
+so $HOME/.config/aliases    # machine-specific
 
 ZSH_THEME="ban"
 so $ZSH/themes/$ZSH_THEME.zsh-theme
@@ -55,7 +55,7 @@ bindkey '^A' autosuggest-execute
 export SUDO_EDITOR=vim
 export EDITOR=vim
 
-# Ensure that the prompt is redrawn when the terminal size changes.
+# ensure that the prompt is redrawn when the terminal size changes.
 TRAPWINCH () { zle &&  zle -R }
 
 # these are needed for some unicode to work (e.g. in tmux)
