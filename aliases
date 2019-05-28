@@ -50,7 +50,8 @@ alias eduroam='nmcli con up eduroam'
 alias pinga='ping archlinux.org'
 alias ip="ip -c"
 alias dns="cat /etc/resolv.conf"
-alias wnet="sudo netstat -nputwc"
+alias wnet="sudo netstat -nputw"
+alias wnetl="sudo netstat -nputlw"
 
 # launchers
 alias ra="ranger"
