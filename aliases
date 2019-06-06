@@ -55,7 +55,6 @@ alias wnetl="sudo netstat -nputlw"
 
 # launchers
 alias ra="ranger"
-alias nc='ncmpcpp'
 alias v="vim"
 alias tmux="tmux -u"
 alias ta="tmux attach"
