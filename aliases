@@ -6,7 +6,7 @@
 # misc
 alias ..='cd ../'
 alias ...='cd ../../'
-alias l='ls -alhF'
+alias l='ls -lhF'
 alias lc='ls -c1'
 alias tmp='cd /tmp; l'
 alias _='sudo'
@@ -60,6 +60,9 @@ alias cl='git clone'
 
 # tools
 alias usync='rsync -avPzh --delete'
+alias psb='python setup.py build'
+alias psi='python setup.py install'
+alias psiu='python setup.py install --user'
 
 # quick edits
 alias modalia='vim $HOME/.config/aliases'
