@@ -5,9 +5,9 @@
 # use last browsed directory automatically with ranger
 ranger-cd() { 
     tempfile="$(mktemp -t tmp.XXXXXX)"
-    if [[ -f /usr/local/bin/ranger ]]
+    if [[ -f $HOME/.local/bin/ranger ]]
     then
-	/usr/local/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+	$HOME/.local/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     else
 	/usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     fi
