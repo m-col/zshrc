@@ -54,45 +54,47 @@ prompt_end() {
 prompt_context() {
     if $IS_SSH; then
 	prompt_segment green black " %(!.%{%F{yellow}%}.)$USER@$HOST "
+    elif [[ $EUID -eq 0 ]]; then
+	prompt_segment red black " %(!.%{%F{black}%}.)$USER@$HOST "
     fi
 }
 
-source $HOME/.zsh/gitstatus/gitstatus.plugin.zsh
-gitstatus_start MY
-prompt_git() {
-    local PL_BRANCH_CHAR
-    () {
-	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-	PL_BRANCH_CHAR=$'\ue0a0'
-    }
-
-    gitstatus_query MY                  || return 1  # error
-    [[ $VCS_STATUS_RESULT == ok-sync ]] || return 0  # not a git repo
-
-    local     clean='%F{076}'  # green foreground
-    local untracked='%F{014}'  # teal foreground
-    local  modified='%F{011}'  # yellow foreground
-
-    local p
-    if (( VCS_STATUS_HAS_STAGED || VCS_STATUS_HAS_UNSTAGED )); then
-	p+=$modified
-    elif (( VCS_STATUS_HAS_UNTRACKED )); then
-	p+=$untracked
-    else
-	p+=$clean
-    fi
-    p+=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}            # escape %
-
-    #[[ -n $VCS_STATUS_TAG               ]] && p+="#${VCS_STATUS_TAG//\%/%%}"  # escape %
-    [[ $VCS_STATUS_HAS_STAGED      == 1 ]] && p+="${modified}+"
-    [[ $VCS_STATUS_HAS_UNSTAGED    == 1 ]] && p+="${modified}!"
-    [[ $VCS_STATUS_HAS_UNTRACKED   == 1 ]] && p+="${untracked}?"
-    [[ $VCS_STATUS_COMMITS_AHEAD  -gt 0 ]] && p+="${clean} ⇡${VCS_STATUS_COMMITS_AHEAD}"
-    [[ $VCS_STATUS_COMMITS_BEHIND -gt 0 ]] && p+="${clean} ⇣${VCS_STATUS_COMMITS_BEHIND}"
-    #[[ $VCS_STATUS_STASHES        -gt 0 ]] && p+="${clean} *${VCS_STATUS_STASHES}"
-
-    prompt_segment default green "${p}"
-}
+#source $HOME/.zsh/gitstatus/gitstatus.plugin.zsh
+#gitstatus_start MY
+#prompt_git() {
+#    local PL_BRANCH_CHAR
+#    () {
+#	local LC_ALL="" LC_CTYPE="en_US.UTF-8"
+#	PL_BRANCH_CHAR=$'\ue0a0'
+#    }
+#
+#    gitstatus_query MY                  || return 1  # error
+#    [[ $VCS_STATUS_RESULT == ok-sync ]] || return 0  # not a git repo
+#
+#    local     clean='%F{076}'  # green foreground
+#    local untracked='%F{014}'  # teal foreground
+#    local  modified='%F{011}'  # yellow foreground
+#
+#    local p
+#    if (( VCS_STATUS_HAS_STAGED || VCS_STATUS_HAS_UNSTAGED )); then
+#	p+=$modified
+#    elif (( VCS_STATUS_HAS_UNTRACKED )); then
+#	p+=$untracked
+#    else
+#	p+=$clean
+#    fi
+#    p+=${${VCS_STATUS_LOCAL_BRANCH:-@${VCS_STATUS_COMMIT}}//\%/%%}            # escape %
+#
+#    #[[ -n $VCS_STATUS_TAG               ]] && p+="#${VCS_STATUS_TAG//\%/%%}"  # escape %
+#    [[ $VCS_STATUS_HAS_STAGED      == 1 ]] && p+="${modified}+"
+#    [[ $VCS_STATUS_HAS_UNSTAGED    == 1 ]] && p+="${modified}!"
+#    [[ $VCS_STATUS_HAS_UNTRACKED   == 1 ]] && p+="${untracked}?"
+#    [[ $VCS_STATUS_COMMITS_AHEAD  -gt 0 ]] && p+="${clean} ⇡${VCS_STATUS_COMMITS_AHEAD}"
+#    [[ $VCS_STATUS_COMMITS_BEHIND -gt 0 ]] && p+="${clean} ⇣${VCS_STATUS_COMMITS_BEHIND}"
+#    #[[ $VCS_STATUS_STASHES        -gt 0 ]] && p+="${clean} *${VCS_STATUS_STASHES}"
+#
+#    prompt_segment default green "${p}"
+#}
 
 
 prompt_dir() {
@@ -118,19 +120,22 @@ prompt_virtualenv() {
 }
 
 
-prompt_status() {
-    local symbols
-    symbols=()
-    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}x"
-    [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
-    [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
-    [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
-}
+#prompt_status() {
+#    local symbols
+#    symbols=()
+#    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}x"
+#    [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
+#    [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+#    [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+#}
 
 
 if $IS_SSH
 then
     tmux_following_colour=green
+elif [[ $EUID -eq 0 ]]
+then
+    tmux_following_colour=red
 else
     tmux_following_colour=magenta
 fi
@@ -172,7 +177,7 @@ build_rprompt() {
     local SEGMENT_SEPARATOR=$SEGMENT_SEPARATOR_R
     prompt_virtualenv
     prompt_vi
-    prompt_git
+    #prompt_git
     prompt_end
 }
 
