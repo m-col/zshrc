@@ -6,7 +6,7 @@
 # misc
 alias ..='cd ../'
 alias ...='cd ../../'
-alias l='ls -lhF'
+alias l='ls -lhFv'
 alias lc='ls -c1'
 alias tmp='cd /tmp; l'
 alias _='sudo'
