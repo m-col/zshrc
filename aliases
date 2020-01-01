@@ -57,6 +57,7 @@ alias brs='git branch -v'
 alias ch='git checkout'
 alias dif='git diff'
 alias cl='git clone'
+alias chp='git cherry-pick'
 
 # tools
 alias usync='rsync -avPzh --delete'

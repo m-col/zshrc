@@ -54,6 +54,7 @@ bindkey '^A' autosuggest-execute
 
 export SUDO_EDITOR=vim
 export EDITOR=vim
+export AUR_PAGER=ranger
 
 # ensure that the prompt is redrawn when the terminal size changes.
 TRAPWINCH () { zle &&  zle -R }
