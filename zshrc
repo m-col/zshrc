@@ -50,6 +50,8 @@ so $ZSH/z/z.sh
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 so $ZSH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+LESSHISTFILE=-
+
 bindkey '^A' autosuggest-execute
 
 export SUDO_EDITOR=vim
