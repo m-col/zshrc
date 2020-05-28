@@ -18,9 +18,11 @@ if $IS_SSH
 then
     SEGMENT_SEPARATOR_L=$'\ue0b0'
     SEGMENT_SEPARATOR_R=$''
+    SEGMENT_END=$'\ue0b0'
 else
-    SEGMENT_SEPARATOR_L=$''
-    SEGMENT_SEPARATOR_R=$''
+    SEGMENT_SEPARATOR_L=$'▋▌'
+    #SEGMENT_SEPARATOR_R=$''
+    #SEGMENT_END=$''
 fi
 }
 
@@ -43,7 +45,7 @@ prompt_segment() {
 # End the prompt, closing any open segments
 prompt_end() {
     if [[ -n $CURRENT_BG ]]; then
-	echo -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+	echo -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_END"
     else
 	echo -n "%{%k%}"
     fi
@@ -98,16 +100,20 @@ prompt_context() {
 
 
 prompt_dir() {
-    prompt_segment magenta black ' %3~ '
+    prompt_segment magenta 4 ' %4~ '
+    #dir=$(print -Pn '%3~/')
+    #[[ "${(q)dir:0:2}" == '\~/' ]] && dir="%F{12}🏠%F{black}${dir:1}"
+    #echo -n " $dir "
 }
 
 
 prompt_mes() {
     if [[ $RETVAL -ne 0 ]]
     then
-	prompt_segment red black ' > '
+	#prompt_segment red black ' ▶ '
+	prompt_segment black red '▍'
     else
-	prompt_segment blue black ' > '
+	prompt_segment black magenta '▍'
     fi
 }
 
@@ -141,7 +147,8 @@ else
 fi
 if $IS_TMUX
 then
-    tmux_indicator=$'\ue0b0'
+    #tmux_indicator=$'\ue0b0'
+    tmux_indicator=⬜
 else
     tmux_indicator=''
 fi

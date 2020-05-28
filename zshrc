@@ -24,8 +24,8 @@ ZSH_COMPDUMP="$HOME/.zcompdump"
 
 # zsh history
 HISTFILE="$HOME/.zsh_history"
-HISTSIZE=8000
-SAVEHIST=4000
+HISTSIZE=12000
+SAVEHIST=8000
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
@@ -68,4 +68,4 @@ export LC_CTYPE=en_US.UTF-8
 # don't load default ranger config
 export RANGER_LOAD_DEFAULT_RC=FALSE
 
-export PYTHONPATH=$HOME/work/analysis/reach
+export PYTHONPATH=$HOME/git/reach
