@@ -40,3 +40,9 @@ shebangpy() { # create new file, add shebang, and vim
 
 # copy file path to clipboard
 cpath() { readlink -f $1 | copy }
+
+
+
+sb () {
+    sed 's/.*/\L&/g; s/\(.\{1\}\)\(.\)/\1\U\2/g' <<< "$@"
+}
