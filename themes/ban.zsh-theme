@@ -1,4 +1,3 @@
-# vim:ft=zsh
 #
 # ban zsh theme
 #
@@ -100,7 +99,7 @@ prompt_context() {
 
 
 prompt_dir() {
-    prompt_segment magenta 4 ' %4~ '
+    prompt_segment magenta 12 ' %4~ '
     #dir=$(print -Pn '%3~/')
     #[[ "${(q)dir:0:2}" == '\~/' ]] && dir="%F{12}🏠%F{black}${dir:1}"
     #echo -n " $dir "
@@ -124,16 +123,6 @@ prompt_virtualenv() {
 	prompt_segment red black " (`basename $virtualenv_path`) "
     fi
 }
-
-
-#prompt_status() {
-#    local symbols
-#    symbols=()
-#    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}x"
-#    [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
-#    [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
-#    [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
-#}
 
 
 if $IS_SSH
