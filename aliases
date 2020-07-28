@@ -10,6 +10,7 @@ alias l='ls -lhFv'
 alias lc='ls -c1'
 alias tmp='cd /tmp; l'
 alias _='sudo'
+alias grep='grep --exclude-dir="__pycache__"'
 
 # systemd
 alias sc='systemctl'
@@ -56,8 +57,10 @@ alias br='git branch'
 alias brs='git branch -v'
 alias ch='git checkout'
 alias dif='git diff'
+alias difs='git diff --staged'
 alias cl='git clone'
 alias chp='git cherry-pick'
+alias res='git restore'
 
 # tools
 alias usync='rsync -avPzh --delete'
