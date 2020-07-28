@@ -46,3 +46,14 @@ cpath() { readlink -f $1 | copy }
 sb () {
     sed 's/.*/\L&/g; s/\(.\{1\}\)\(.\)/\1\U\2/g' <<< "$@"
 }
+
+
+hex_fg() {
+    #eval printf \"x1b[38\;2\;$(printf "\$((16#%s));\$((16#%s));\$((16#%s))\n" $(echo ${1//#} | fold -w2))m\"  # <- works up to leading escape
+    eval printf \\\\\"x1b[38\;2\;$(printf "\$((16#%s));\$((16#%s));\$((16#%s))\n" $(echo ${1//#} | fold -w2))m\"
+}
+
+hex_bg() {
+    #eval printf \"x1b[38\;2\;$(printf "\$((16#%s));\$((16#%s));\$((16#%s))\n" $(echo ${1//#} | fold -w2))m\"  # <- works up to leading escape
+    eval printf \\\\\"x1b[48\;2\;$(printf "\$\(\(16#%s\)\);\$\(\(16#%s\)\);\$\(\(16#%s\)\)\n" $(echo ${1//#} | fold -w2))m\"
+}
