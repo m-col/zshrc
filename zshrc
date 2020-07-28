@@ -17,7 +17,7 @@ else
 fi
 
 # zsh settings
-ZSH="$HOME/.zsh"
+local ZSH="$HOME/.zsh"
 HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 ZSH_COMPDUMP="$HOME/.zcompdump"
@@ -26,7 +26,7 @@ ZSH_COMPDUMP="$HOME/.zcompdump"
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=12000
 SAVEHIST=8000
-setopt SHARE_HISTORY
+#setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 
