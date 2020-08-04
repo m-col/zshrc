@@ -57,3 +57,11 @@ hex_bg() {
     #eval printf \"x1b[38\;2\;$(printf "\$((16#%s));\$((16#%s));\$((16#%s))\n" $(echo ${1//#} | fold -w2))m\"  # <- works up to leading escape
     eval printf \\\\\"x1b[48\;2\;$(printf "\$\(\(16#%s\)\);\$\(\(16#%s\)\);\$\(\(16#%s\)\)\n" $(echo ${1//#} | fold -w2))m\"
 }
+
+avi_to_mp4() {
+    ffmpeg -i $1 -c:v libx264 -preset slow -crf 19 -c:a libvo_aacenc -b:a 128k $2
+}
+
+rec_screen() {
+    ffmpeg -f x11grab -y -r 30 -s 1920x1080 -i :0.0 -vcodec huffyuv out.mp4
+}
