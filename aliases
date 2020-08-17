@@ -11,6 +11,7 @@ alias lc='ls -c1'
 alias tmp='cd /tmp; l'
 alias _='sudo'
 alias grep='grep --exclude-dir="__pycache__"'
+alias p='ps aux  | grep -v grep | grep -i'
 
 # systemd
 alias sc='systemctl'
@@ -60,7 +61,7 @@ alias dif='git diff'
 alias difs='git diff --staged'
 alias cl='git clone'
 alias chp='git cherry-pick'
-alias res='git restore'
+alias rs='git restore'
 
 # tools
 alias usync='rsync -avPzh --delete'
