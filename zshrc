@@ -69,3 +69,5 @@ export LC_CTYPE=en_US.UTF-8
 export RANGER_LOAD_DEFAULT_RC=FALSE
 
 export PYTHONPATH=$HOME/git/reach
+export XKB_DEFAULT_OPTIONS=caps:swapescape,altwin:swap_alt_win
+export XKB_DEFAULT_LAYOUT=gb
