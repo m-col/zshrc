@@ -63,8 +63,12 @@ avi_to_mp4() {
 }
 
 rec_screen() {
-    ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 out.mp4
+    ffmpeg -f x11grab -r 30 -s 1920x1080 -i $DISPLAY -pix_fmt yuv420p out.mp4
 }
 rec_screen_mic() {
-    ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -f pulse -ac 2 -i default out.mkv
+    ffmpeg -f x11grab -r 30 -s 1920x1080 -i $DISPLAY -f pulse -ac 2 -i default out.mkv
+}
+
+tagans() {
+    git log --pretty=format:"%an" $1...$2 | sort -u
 }

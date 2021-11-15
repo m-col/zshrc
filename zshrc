@@ -21,6 +21,7 @@ local ZSH="$HOME/.zsh"
 HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 ZSH_COMPDUMP="$HOME/.zcompdump"
+setopt NO_nomatch
 
 # zsh history
 HISTFILE="$HOME/.zsh_history"
@@ -68,6 +69,16 @@ export LC_CTYPE=en_US.UTF-8
 # don't load default ranger config
 export RANGER_LOAD_DEFAULT_RC=FALSE
 
-export PYTHONPATH=$HOME/git/reach
-export XKB_DEFAULT_OPTIONS=caps:swapescape,altwin:swap_alt_win
-export XKB_DEFAULT_LAYOUT=gb
+export PYTHONPATH=$HOME/git/reach:$PYTHONPATH
+
+# mypy
+export MYPYPATH=$PYTHONPATH
+
+export PAGER="less --mouse"
+
+# If being executed via the '2' script
+if [[ -n "$DO2" ]]
+then
+    z $DO2
+    unset DO2
+fi
