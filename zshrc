@@ -22,6 +22,7 @@ HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="true"
 ZSH_COMPDUMP="$HOME/.zcompdump"
 setopt NO_nomatch
+fpath=(~/.zfunc $fpath)
 
 # zsh history
 HISTFILE="$HOME/.zsh_history"
