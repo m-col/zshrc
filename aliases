@@ -10,7 +10,6 @@ alias l='ls -lhFv -I \*.o'
 alias lc='ls -c1'
 alias tmp='cd /tmp; l'
 alias _='sudo'
-alias grep='grep --exclude-dir="__pycache__"'
 alias p='ps aux  | grep -v grep | grep -i'
 alias import='echo you forgot to enter python'
 alias rg='grep -r'
@@ -22,6 +21,8 @@ then
 else
     alias copy='wl-copy'
 fi
+
+alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.eggs --exclude-dir=.mypy_cache'
 
 # systemd
 alias sc='systemctl'
@@ -62,6 +63,7 @@ alias ad='git add'
 alias co='git commit'
 alias cm='git commit -m'
 alias ca='git commit --amend'
+alias cmf='git commit --fixup'
 alias psh='git push'
 alias pshs='git push &> /dev/null &'
 alias fe='git fetch && git status'
@@ -69,9 +71,9 @@ alias pl='git pull'
 alias rb='git pull --rebase upstream master || git pull --rebase upstream main'
 alias rbi='git rebase -i'
 alias rbc='git rebase --continue'
+alias rba='git rebase --abort'
 rbh() { git rebase -i HEAD~$1; }
-alias br='git branch'
-alias brs='git branch -v'
+alias br='git branch -v'
 alias ch='git checkout'
 alias dif='git diff'
 alias diff='git diff --'
@@ -84,6 +86,7 @@ alias stl='git stash list'
 alias stp='git stash pop'
 pr() { git fetch upstream pull/$1/head:$1 && git checkout $1; }
 lg() { git log -${1:-1}; }
+lgo()  { git log --oneline -${1:-1}; }
 alias lgc="git log -1 | head -1 | awk '{print \$2}' | copy -n"
 
 # tools
@@ -93,6 +96,7 @@ alias psi='python setup.py -q install'
 alias psiu='python setup.py -q install --user'
 alias m=make
 alias mc='make clean'
+alias time='hyperfine'
 
 # quick edits
 alias modalia='vim $HOME/.config/aliases && source $HOME/.config/aliases'
@@ -113,3 +117,7 @@ alias gv='cd $HOME/.vim/bundle/vim-misc'
 alias gvm='cd $HOME/.vim/bundle/vim-misc; ra'
 alias gz='cd $HOME/.zsh; l'
 alias gR='cd $HOME/reach'
+
+alias c='cargo'
+alias cw='cargo-watch -c -q -x run'
+alias cf='cargo fmt'
