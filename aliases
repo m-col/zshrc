@@ -13,6 +13,7 @@ alias _='sudo'
 alias p='ps aux  | grep -v grep | grep -i'
 alias import='echo you forgot to enter python'
 alias rg='grep -r'
+alias pth='echo "${PATH//:/\n}"'
 vgr() { vim `grep -lr "$@"`; }
 
 if [[ -z "$WAYLAND_DISPLAY" ]]
@@ -68,7 +69,14 @@ alias psh='git push'
 alias pshs='git push &> /dev/null &'
 alias fe='git fetch && git status'
 alias pl='git pull'
-alias rb='git pull --rebase upstream master || git pull --rebase upstream main'
+rb() {
+    if git branch | /usr/bin/grep -qw main
+    then
+	git pull --rebase upstream main
+    else
+	git pull --rebase upstream master
+    fi
+}
 alias rbi='git rebase -i'
 alias rbc='git rebase --continue'
 alias rba='git rebase --abort'
@@ -76,7 +84,7 @@ rbh() { git rebase -i HEAD~$1; }
 alias br='git branch -v'
 alias ch='git checkout'
 alias dif='git diff'
-alias diff='git diff --'
+#alias diff='git diff --'
 alias dic='git diff --cached'
 alias cl='git clone'
 alias chp='git cherry-pick'
@@ -96,7 +104,6 @@ alias psi='python setup.py -q install'
 alias psiu='python setup.py -q install --user'
 alias m=make
 alias mc='make clean'
-alias time='hyperfine'
 
 # quick edits
 alias modalia='vim $HOME/.config/aliases && source $HOME/.config/aliases'
@@ -108,7 +115,7 @@ alias modrc='vim $HOME/.config/ranger/rc.conf'
 # shortcuts
 alias gc='cd $HOME/.config'
 alias gd='cd $HOME/documents'
-alias gD='cd $HOME/Downloads'
+alias gD='cd $HOME/downloads'
 alias gde='cd $HOME/desktop'
 alias gg='cd $HOME/git; l'
 alias gb='cd $HOME/.config/bin'

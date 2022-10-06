@@ -56,26 +56,18 @@ LESSHISTFILE=-
 
 bindkey '^A' autosuggest-execute
 
-export SUDO_EDITOR=vim
-export EDITOR=vim
-export AUR_PAGER=ranger
+export \
+    SUDO_EDITOR=vim \
+    EDITOR=vim \
+    AUR_PAGER=ranger \
+    TERM=xterm \
+    LANG=en_US.UTF-8 \
+    LC_CTYPE=en_US.UTF-8 \
+    PAGER="less --mouse" \
+    RANGER_LOAD_DEFAULT_RC=FALSE
 
 # ensure that the prompt is redrawn when the terminal size changes.
 TRAPWINCH () { zle &&  zle -R }
-
-# these are needed for some unicode to work (e.g. in tmux)
-export LANG=en_US.UTF-8
-export LC_CTYPE=en_US.UTF-8
-
-# don't load default ranger config
-export RANGER_LOAD_DEFAULT_RC=FALSE
-
-export PYTHONPATH=$HOME/git/reach:$PYTHONPATH
-
-# mypy
-export MYPYPATH=$PYTHONPATH
-
-export PAGER="less --mouse"
 
 # If being executed via the '2' script
 if [[ -n "$DO2" ]]
@@ -83,3 +75,6 @@ then
     z $DO2
     unset DO2
 fi
+
+# Init PYENV for interactive shell
+eval "$(pyenv init -)"
