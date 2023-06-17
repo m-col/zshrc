@@ -16,6 +16,8 @@ else
     export IS_TMUX=false
 fi
 
+export IS_DOCKER=${IS_DOCKER:-false}
+
 # zsh settings
 local ZSH="$HOME/.zsh"
 HYPHEN_INSENSITIVE="true"
@@ -75,6 +77,3 @@ then
     z $DO2
     unset DO2
 fi
-
-# Init PYENV for interactive shell
-eval "$(pyenv init -)"

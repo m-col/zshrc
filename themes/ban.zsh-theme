@@ -125,7 +125,7 @@ prompt_virtualenv() {
 }
 
 
-if $IS_SSH
+if $IS_SSH || $IS_DOCKER
 then
     tmux_following_colour=green
 elif [[ $EUID -eq 0 ]]

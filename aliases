@@ -6,7 +6,7 @@
 # misc
 alias ..='cd ../'
 alias ...='cd ../../'
-alias l='ls -lhFv -I \*.o'
+alias l='ls -lhFv'
 alias lc='ls -c1'
 alias tmp='cd /tmp; l'
 alias _='sudo'
@@ -15,12 +15,19 @@ alias import='echo you forgot to enter python'
 alias rg='grep -r'
 alias pth='echo "${PATH//:/\n}"'
 vgr() { vim `grep -lr "$@"`; }
+alias va="source venv/bin/activate"
+alias vd="deactivate"
+alias dc=docker-compose
 
-if [[ -z "$WAYLAND_DISPLAY" ]]
+if [[ -n "$WAYLAND_DISPLAY" ]]
+then
+    alias copy='wl-copy'
+elif [[ -n "$DISPLAY" ]]
 then
     alias copy='xclip -selection clipboard'
-else
-    alias copy='wl-copy'
+elif [[ "$OSTYPE" == "darwin"* ]]
+then
+    alias copy=pbcopy
 fi
 
 alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.eggs --exclude-dir=.mypy_cache'
@@ -61,12 +68,13 @@ alias ta='tmux attach'
 # git
 alias gs='git status'
 alias ad='git add'
+alias adp='git add --patch'
 alias co='git commit'
 alias cm='git commit -m'
 alias ca='git commit --amend'
 alias cmf='git commit --fixup'
 alias psh='git push'
-alias pshs='git push &> /dev/null &'
+alias pshs='git push &> /dev/null &|'
 alias fe='git fetch && git status'
 alias pl='git pull'
 rb() {
@@ -97,6 +105,11 @@ lg() { git log -${1:-1}; }
 lgo()  { git log --oneline -${1:-1}; }
 alias lgc="git log -1 | head -1 | awk '{print \$2}' | copy -n"
 
+pdif() {
+    git diff --name-only --diff-filter=${1:-M}
+}
+alias vimd='vim `pdif`'
+
 # tools
 alias usync='rsync -avPzh --delete'
 alias psb='python setup.py -q build'
@@ -120,8 +133,7 @@ alias gde='cd $HOME/desktop'
 alias gg='cd $HOME/git; l'
 alias gb='cd $HOME/.config/bin'
 alias ge='cd /etc'
-alias gv='cd $HOME/.vim/bundle/vim-misc'
-alias gvm='cd $HOME/.vim/bundle/vim-misc; ra'
+alias gv='cd $HOME/.vim/pack/vim-misc'
 alias gz='cd $HOME/.zsh; l'
 alias gR='cd $HOME/reach'
 

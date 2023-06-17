@@ -3,13 +3,14 @@
 #
 
 # use last browsed directory automatically with ranger
+_ranger=`which ranger`
 ranger-cd() { 
     tempfile="$(mktemp -t ranger.XXXXXX)"
     if [[ -f $HOME/.local/bin/ranger ]]
     then
 	$HOME/.local/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     else
-	/usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+	$_ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     fi
     test -f "$tempfile" &&
 	if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
