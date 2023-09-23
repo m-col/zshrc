@@ -64,7 +64,12 @@ avi_to_mp4() {
 }
 
 rec_screen() {
-    ffmpeg -f x11grab -r 30 -s 1920x1080 -i $DISPLAY -pix_fmt yuv420p out.mp4
+    if [[ -n "$WAYLAND_DISPLAY" ]]
+    then
+	wf-recorder
+    else
+	ffmpeg -f x11grab -r 30 -s 1920x1080 -i $DISPLAY -pix_fmt yuv420p out.mp4
+    fi
 }
 rec_screen_mic() {
     ffmpeg -f x11grab -r 30 -s 1920x1080 -i $DISPLAY -f pulse -ac 2 -i default out.mkv

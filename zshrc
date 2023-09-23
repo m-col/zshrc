@@ -63,8 +63,8 @@ export \
     EDITOR=nvim \
     AUR_PAGER=ranger \
     TERM=xterm \
-    LANG=en_US.UTF-8 \
-    LC_CTYPE=en_US.UTF-8 \
+    LANG=en_GB.UTF-8 \
+    LC_CTYPE=en_GB.UTF-8 \
     PAGER="less --mouse" \
     RANGER_LOAD_DEFAULT_RC=FALSE
 
