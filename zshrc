@@ -59,8 +59,8 @@ LESSHISTFILE=-
 bindkey '^A' autosuggest-execute
 
 export \
-    SUDO_EDITOR=vim \
-    EDITOR=vim \
+    SUDO_EDITOR=nvim \
+    EDITOR=nvim \
     AUR_PAGER=ranger \
     TERM=xterm \
     LANG=en_US.UTF-8 \

@@ -14,10 +14,12 @@ alias p='ps aux  | grep -v grep | grep -i'
 alias import='echo you forgot to enter python'
 alias rg='grep -r'
 alias pth='echo "${PATH//:/\n}"'
-vgr() { vim `grep -lr "$@"`; }
+vgr() { nvim `grep -lr "$@"`; }
 alias va="source venv/bin/activate"
 alias vd="deactivate"
 alias dc=docker-compose
+alias vim=nvim
+alias fv="fzf --print0 | xargs -0 -o nvim"
 
 if [[ -n "$WAYLAND_DISPLAY" ]]
 then
@@ -61,7 +63,7 @@ alias wnetl='sudo netstat -nputlw'
 
 # launchers
 alias ra='ranger'
-alias v='vim'
+alias v='nvim'
 alias tmux='tmux -u'
 alias ta='tmux attach'
 
@@ -97,6 +99,8 @@ alias dic='git diff --cached'
 alias cl='git clone'
 alias chp='git cherry-pick'
 alias rs='git restore'
+alias rsp='git restore --patch'
+alias rss='git restore --staged'
 alias st='git stash'
 alias stl='git stash list'
 alias stp='git stash pop'
@@ -108,7 +112,7 @@ alias lgc="git log -1 | head -1 | awk '{print \$2}' | copy -n"
 pdif() {
     git diff --name-only --diff-filter=${1:-M}
 }
-alias vimd='vim `pdif`'
+alias vimd='nvim `pdif`'
 
 # tools
 alias usync='rsync -avPzh --delete'
@@ -119,11 +123,10 @@ alias m=make
 alias mc='make clean'
 
 # quick edits
-alias modalia='vim $HOME/.config/aliases && source $HOME/.config/aliases'
-alias modaliaz='vim $ZSH/aliases && source $ZSH/aliases'
-alias vimrc='vim $HOME/.vim/bundle/vim-misc/vimrc'
-alias zshrc='vim $HOME/.zsh/zshrc'
-alias modrc='vim $HOME/.config/ranger/rc.conf'
+alias modalia='nvim $HOME/.config/aliases && source $HOME/.config/aliases'
+alias modaliaz='nvim $ZSH/aliases && source $ZSH/aliases'
+alias zshrc='nvim $HOME/.zsh/zshrc'
+alias modrc='nvim $HOME/.config/ranger/rc.conf'
 
 # shortcuts
 alias gc='cd $HOME/.config'
