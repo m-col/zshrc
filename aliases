@@ -124,6 +124,7 @@ alias psi='python setup.py -q install'
 alias psiu='python setup.py -q install --user'
 alias m=make
 alias mc='make clean'
+check() { pytest -xs --pdbcls pudb.debugger:Debugger $@; }
 
 # quick edits
 alias modalia='nvim $HOME/.config/aliases && source $HOME/.config/aliases'
