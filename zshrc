@@ -66,7 +66,8 @@ export \
     LANG=en_GB.UTF-8 \
     LC_CTYPE=en_GB.UTF-8 \
     PAGER="less --mouse" \
-    RANGER_LOAD_DEFAULT_RC=FALSE
+    RANGER_LOAD_DEFAULT_RC=FALSE \
+    PYTHONSTARTUP=~/.zsh/pythonrc.py
 
 # ensure that the prompt is redrawn when the terminal size changes.
 TRAPWINCH () { zle &&  zle -R }
