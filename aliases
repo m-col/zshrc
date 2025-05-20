@@ -15,7 +15,7 @@ alias p='ps aux  | grep -v grep | grep -i'
 alias import='echo you forgot to enter python'
 alias rg='grep -r'
 alias pth='echo "${PATH//:/\n}"'
-vgr() { nvim `grep -lr "$@"`; }
+vgr() { nvim `grep -lri "$@"`; }
 alias va="source venv/bin/activate"
 alias vd="deactivate"
 alias dc=docker-compose
