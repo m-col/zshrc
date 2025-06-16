@@ -30,13 +30,13 @@ shebang() { # create new file, add shebang, and vim
     touch $1
     chmod +x $1
     echo -e "#!/usr/bin/env bash\n" > $1
-    vim +2 $1
+    nvim +2 $1
 }
 shebangpy() { # create new file, add shebang, and vim
     touch $1
     chmod +x $1
     echo -e "#!/usr/bin/env python3\n" > $1
-    vim +2 $1
+    nvim +2 $1
 }
 
 # copy file path to clipboard

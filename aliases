@@ -21,6 +21,7 @@ alias vd="deactivate"
 alias dc=docker-compose
 alias vim=nvim
 alias fv="fzf --print0 | xargs -0 -o nvim"
+alias cat=bat
 
 if [[ -n "$WAYLAND_DISPLAY" ]]
 then
@@ -124,6 +125,7 @@ alias psi='python setup.py -q install'
 alias psiu='python setup.py -q install --user'
 alias m=make
 alias mc='make clean'
+alias vimrc='nvim ~/.vim/pack/vim-misc/start/self/plugin/settings.vim'
 check() { pytest -xs --pdbcls pudb.debugger:Debugger $@; }
 
 # quick edits
@@ -144,7 +146,6 @@ alias gv='cd $HOME/.vim/pack/vim-misc'
 alias gz='cd $HOME/.zsh; l'
 alias gR='cd $HOME/reach'
 
-alias c='cargo'
-alias cw='cargo-watch -c -q -x run'
 alias cb='cargo build --'
 alias cf='cargo fmt'
+alias cf='cargo run'
