@@ -38,4 +38,4 @@ __dockerCompletion_registerCompletion(){
     __dockerCompletion_linkIfNeeded "${basePath}/etc/docker-compose.zsh-completion" "_docker-compose"
 }
 
-__dockerCompletion_registerCompletion
+__dockerCompletion_registerCompletion &>/dev/null

@@ -7,7 +7,6 @@ then
     # I considered disabling ctrl-t to set it to type out fz, but the default
     # ctrl-t can be helpful for e.g. pytest, selecting and pasting paths.
     #bindkey -s '^t' "fv\n"
-    #export FZF_CTRL_T_COMMAND=""
 
 	#--preview 'bat -n --color=always {}'
 	#--bind 'ctrl-/:change-preview-window(down|hidden|)'
@@ -19,12 +18,18 @@ then
     source <(fzf --zsh)
 
     _fzf-file-widget () {
-	[[ -z "$LBUFFER" ]] && LBUFFER="vim "
+	INIT_BUFFER="$LBUFFER"
+	[[ -z "$INIT_BUFFER" ]] && LBUFFER="vim "
 	fzf-file-widget
-	zle accept-line
+	if [[ $? -eq 0 ]]
+	then
+	    zle accept-line
+	else
+	    LBUFFER="$INIT_BUFFER"
+	fi
     }
 
     zle     -N            _fzf-file-widget
-    bindkey -M vicmd '^T' _fzf-file-widget
-    bindkey -M viins '^T' _fzf-file-widget
+    bindkey -M vicmd '^P' _fzf-file-widget
+    bindkey -M viins '^P' _fzf-file-widget
 fi
