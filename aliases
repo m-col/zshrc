@@ -117,6 +117,12 @@ pdif() {
     git diff --name-only --diff-filter=${1:-M}
 }
 alias vimd='nvim `pdif`'
+tagans() {
+    git log --pretty=format:"%an" $1...$2 | sort -u
+}
+get_git_dirty() {
+    git status --porcelain | awk 'match($1, "M"){print $2}' | grep -E "\.tsx$|\.ts$"
+}
 
 # tools
 alias usync='rsync -avPzh --delete'
