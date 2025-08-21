@@ -3,28 +3,30 @@
 #
 
 # use last browsed directory automatically with ranger
-_ranger=`which ranger`
-ranger-cd() { 
-    tempfile="$(mktemp -t ranger.XXXXXX)"
-    if [[ -f $HOME/.local/bin/ranger ]]
-    then
-	$HOME/.local/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    else
-	$_ranger --choosedir="$tempfile" "${@:-$(pwd)}"
-    fi
-    test -f "$tempfile" &&
-	if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-	    cd -- "$(cat "$tempfile")"
+if which ranger &> /dev/null; then
+    _ranger=`which ranger`
+    ranger-cd() {
+	tempfile="$(mktemp -t ranger.XXXXXX)"
+	if [[ -f $HOME/.local/bin/ranger ]]
+	then
+	    $HOME/.local/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+	else
+	    $_ranger --choosedir="$tempfile" "${@:-$(pwd)}"
 	fi
-	rm -f -- "$tempfile"
-}
-ranger() { # prevent nested ranger instances when shelling from ranger
-    if [ -z "$RANGER_LEVEL" ]; then
-	ranger-cd "$@"
-    else
-	exit
-    fi
-}
+	test -f "$tempfile" &&
+	    if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+		cd -- "$(cat "$tempfile")"
+	    fi
+	    rm -f -- "$tempfile"
+    }
+    ranger() { # prevent nested ranger instances when shelling from ranger
+	if [ -z "$RANGER_LEVEL" ]; then
+	    ranger-cd "$@"
+	else
+	    exit
+	fi
+    }
+fi
 
 shebang() { # create new file, add shebang, and vim
     touch $1

@@ -12,7 +12,7 @@ then
 	#--bind 'ctrl-/:change-preview-window(down|hidden|)'
     export FZF_DEFAULT_OPTS="
 	--tmux
-	--walker-skip .git,node_modules,target,.mypy_cache,.venv,__pycache__,.DS_Store
+	--walker-skip .git,node_modules,target,.mypy_cache,.venv,__pycache__,.DS_Store,ws
 	"
     export FZF_CTRL_T_COMMAND=""
     source <(fzf --zsh)

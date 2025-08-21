@@ -62,7 +62,7 @@ export \
     SUDO_EDITOR=nvim \
     EDITOR=nvim \
     AUR_PAGER=ranger \
-    TERM=xterm \
+    TERM=xterm-256color \
     LANG=en_GB.UTF-8 \
     LC_CTYPE=en_GB.UTF-8 \
     PAGER="less --mouse" \
