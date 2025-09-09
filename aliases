@@ -123,6 +123,7 @@ tagans() {
 get_git_dirty() {
     git status --porcelain | awk 'match($1, "M"){print $2}' | grep -E "\.tsx$|\.ts$"
 }
+alias prs="gh search prs --author=@me --owner=edra-org --state=open"
 
 # tools
 alias usync='rsync -avPzh --delete'
