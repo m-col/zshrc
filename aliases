@@ -2,6 +2,8 @@
 # General aliases go here
 # Machine-specific aliases go in $HOME/.config/aliases
 # 
+#
+alias uv-debug-setup="uv pip install ptpython pudb"
 
 # misc
 alias ..='cd ../'
@@ -22,6 +24,7 @@ alias dc=docker-compose
 alias vim=nvim
 alias fv="fzf --print0 | xargs -0 -o nvim"
 alias cat=bat
+alias vi=vim
 
 if [[ -n "$WAYLAND_DISPLAY" ]]
 then
@@ -34,7 +37,7 @@ then
     alias copy=pbcopy
 fi
 
-alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.git --exclude-dir=.tox --exclude-dir=.eggs --exclude-dir=.mypy_cache'
+alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.terraform --exclude-dir=.git --exclude-dir=.tox --exclude-dir=tags --exclude-dir=.eggs --exclude-dir=.mypy_cache'
 
 # systemd
 alias sc='systemctl'
@@ -108,10 +111,33 @@ alias rssp='git restore --staged --patch'
 alias st='git stash'
 alias stl='git stash list'
 alias stp='git stash pop'
+alias cg='cd "$(git rev-parse --show-cdup)"'
 pr() { git fetch upstream pull/$1/head:$1 && git checkout $1; }
 lg() { git log -${1:-1}; }
 lgo()  { git log --oneline -${1:-1}; }
 alias lgc="git log -1 | head -1 | awk '{print \$2}' | copy -n"
+newbr() {
+    branches=$(br | wc -l)
+    if (( branches != 2 ))
+    then
+	echo "$branches branches, can't continue"
+	return 0
+    fi
+    new_name="$1"
+    if [[ -z "$new_name" ]]
+    then
+	echo "no name given, pass in a name"
+	return 0
+    fi
+    ch main
+    br -D $(git branch --format='%(refname:short)' | grep -v main)
+    pl
+    ch -b matt/$new_name
+    echo
+    br
+    echo
+    gs
+}
 
 pdif() {
     git diff --name-only --diff-filter=${1:-M}
@@ -123,7 +149,13 @@ tagans() {
 get_git_dirty() {
     git status --porcelain | awk 'match($1, "M"){print $2}' | grep -E "\.tsx$|\.ts$"
 }
-alias prs="gh search prs --author=@me --owner=edra-org --state=open"
+prs() {
+    (echo -e "REPO\tNUMBER\tTITLE\tURL" && \
+	gh search prs --author=@me --owner=edra-org --state=open \
+      --json number,title,repository,url \
+      --jq '.[] | [.repository.name, "#\(.number)", .title, .url] | @tsv') \
+      | column -t -s $'\t'
+}
 
 # tools
 alias usync='rsync -avPzh --delete'
