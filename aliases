@@ -37,7 +37,7 @@ then
     alias copy=pbcopy
 fi
 
-alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.terraform --exclude-dir=.git --exclude-dir=.tox --exclude-dir=tags --exclude-dir=.eggs --exclude-dir=.mypy_cache'
+alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.terraform --exclude-dir=.git --exclude-dir=.venv --exclude-dir=.tox --exclude-dir=tags --exclude-dir=.eggs --exclude-dir=.mypy_cache'
 
 # systemd
 alias sc='systemctl'
@@ -74,6 +74,7 @@ alias tmux='tmux -u'
 alias ta='tmux attach'
 
 # git
+alias g='gita'
 alias gs='git status'
 alias ad='git add'
 alias adp='git add --patch'
@@ -116,28 +117,40 @@ pr() { git fetch upstream pull/$1/head:$1 && git checkout $1; }
 lg() { git log -${1:-1}; }
 lgo()  { git log --oneline -${1:-1}; }
 alias lgc="git log -1 | head -1 | awk '{print \$2}' | copy -n"
-newbr() {
-    branches=$(br | wc -l)
-    if (( branches != 2 ))
-    then
-	echo "$branches branches, can't continue"
-	return 0
-    fi
-    new_name="$1"
-    if [[ -z "$new_name" ]]
-    then
-	echo "no name given, pass in a name"
-	return 0
-    fi
-    ch main
-    br -D $(git branch --format='%(refname:short)' | grep -v main)
-    pl
-    ch -b matt/$new_name
-    echo
-    br
-    echo
-    gs
-}
+#newbr() {
+#    branches=$(br | wc -l)
+#    if (( branches != 2 ))
+#    then
+#	echo "$branches branches, can't continue"
+#	return 0
+#    fi
+#    new_name="$1"
+#    if [[ -z "$new_name" ]]
+#    then
+#	echo "no name given, pass in a name"
+#	return 0
+#    fi
+#    ch main
+#    br -D $(git branch --format='%(refname:short)' | grep -v main)
+#    pl
+#    ch -b matt/$new_name
+#    echo
+#    br
+#    echo
+#    gs
+#}
+#nobr() {
+#    branches=$(br | wc -l)
+#    if (( branches == 1 ))
+#    then
+#	return 0
+#    fi
+#    ch main
+#    br -D $(git branch --format='%(refname:short)' | grep -v main)
+#    pl
+#    gs
+#}
+
 
 pdif() {
     git diff --name-only --diff-filter=${1:-M}
@@ -156,6 +169,10 @@ prs() {
       --jq '.[] | [.repository.name, "#\(.number)", .title, .url] | @tsv') \
       | column -t -s $'\t'
 }
+pshpr() {
+    psh && gh pr create --fill
+}
+
 
 # tools
 alias usync='rsync -avPzh --delete'
