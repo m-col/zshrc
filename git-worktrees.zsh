@@ -1,3 +1,15 @@
+case "${WAYLAND_DISPLAY:+wayland}${DISPLAY:+x11}$OSTYPE" in
+    wayland*)
+        _copy='wl-copy'
+        ;;
+    x11*)
+        _copy='xclip -selection clipboard'
+        ;;
+    darwin*)
+        _copy=pbcopy
+        ;;
+esac
+
 # Add a worktree - creates branch from main if it doesn't exist
 gw() {
     local input="$1"
@@ -8,6 +20,7 @@ gw() {
 
     local branch="${input##origin/}"
     local folder="${branch//\//-}"
+    echo -n "$folder" | $_copy
     local target="../$folder"
 
     # Check if worktree already exists
@@ -35,8 +48,28 @@ gw() {
     git worktree add -b "$branch" "$target" main && cd "$target"
 }
 
+# cd to top-level folder of a worktree if we're inside a subfolder, otherwise cd to main
+gw_top_level() {
+    local root="${HOME}/git/$1"
+
+    # Check if we're inside a subfolder of the repo
+    if [[ "$PWD" == "$root"/* ]]; then
+        # Extract path relative to root, then get first component
+        local relative="${PWD#$root/}"
+        local subfolder="${relative%%/*}"
+        cd "$root/$subfolder"
+    else
+        cd "$root/main"
+    fi
+}
+
 # Remove a worktree
 gwr() {
+    if [[ "$(git rev-parse --is-inside-work-tree)" != "true" ]]; then
+        echo "Not in a worktree"
+        return 1
+    fi
+    cd $(git rev-parse --show-toplevel)
     local target="${1:-$(basename "$PWD")}"
 
     if [[ "$target" == "main" ]]; then

@@ -15,7 +15,6 @@ alias gtmp='cd `mktemp -d`'
 alias _='sudo'
 alias p='ps aux  | grep -v grep | grep -i'
 alias import='echo you forgot to enter python'
-alias rg='grep -r'
 alias pth='echo "${PATH//:/\n}"'
 vgr() { nvim `grep -lri "$@"`; }
 alias va="source venv/bin/activate"
@@ -25,6 +24,7 @@ alias vim=nvim
 alias fv="fzf --print0 | xargs -0 -o nvim"
 alias cat=bat
 alias vi=vim
+alias t="vim ~/tasks.rst"
 
 if [[ -n "$WAYLAND_DISPLAY" ]]
 then
@@ -37,7 +37,7 @@ then
     alias copy=pbcopy
 fi
 
-alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.terraform --exclude-dir=.git --exclude-dir=.venv --exclude-dir=.tox --exclude-dir=tags --exclude-dir=.eggs --exclude-dir=.mypy_cache'
+alias grep='grep --exclude-dir=__pycache__ --exclude-dir=.terraform --exclude-dir=.git --exclude-dir=.venv --exclude-dir=.tox --exclude=tags --exclude-dir=.eggs --exclude-dir=.mypy_cache'
 
 # systemd
 alias sc='systemctl'
@@ -170,8 +170,26 @@ prs() {
       | column -t -s $'\t'
 }
 pshpr() {
-    psh && gh pr create --fill
+    psh && gh pr create --fill | tail -n 1 | xargs open
 }
+alias cmx='cm fix'
+alias cmxp='cm fix && psh'
+
+vin() { vim "$@" }
+_vin_git_modified() {
+  local repo_root files file rel
+  repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || return
+  files=(${(f)"$(git status --porcelain --untracked-files=no 2>/dev/null | awk '/^ M/{print $2}')"})
+  for i in {1..$#files}; do
+    file="$repo_root/${files[$i]}"
+    rel=${file:#$PWD/}
+    files[$i]="${rel#$PWD/}"
+  done
+  compadd -U -a files
+}
+compdef _vin_git_modified vin
+
+
 
 
 # tools
