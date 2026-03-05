@@ -76,3 +76,13 @@ rec_screen() {
 rec_screen_mic() {
     ffmpeg -f x11grab -r 30 -s 1920x1080 -i $DISPLAY -f pulse -ac 2 -i default out.mkv
 }
+
+#go() {
+#    title="$@"
+#    if [[ -z "$title" ]]
+#    then
+#	echo "usage: go <title>"
+#	return
+#    fi
+#    alacritty msg create-window --title "$title" --working-directory ~/git --command /opt/homebrew/bin/tmux
+#}
