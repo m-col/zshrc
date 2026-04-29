@@ -20,9 +20,25 @@ then
     _fzf-file-widget () {
 	INIT_BUFFER="$LBUFFER"
 	[[ -z "$INIT_BUFFER" ]] && LBUFFER="vim "
-	fzf-file-widget
-	if [[ $? -eq 0 ]]
-	then
+
+	local suffix=""
+	[[ -n "$CLAUDE_CONTEXT_ID" ]] && suffix=".$CLAUDE_CONTEXT_ID"
+	local context_file="$HOME/.local/share/claude/context-files${suffix}"
+	local selected
+	selected=$({
+	    if [[ -f "$context_file" ]]; then
+		local f rel
+		while IFS= read -r f; do
+		    [[ -f "$f" ]] || continue
+		    rel="${f#$PWD/}"
+		    echo "$rel"
+		done < <(tail -r "$context_file")
+	    fi
+	    fd --type f --strip-cwd-prefix 2>/dev/null
+	} | awk '!seen[$0]++' | fzf)
+
+	if [[ -n "$selected" ]]; then
+	    LBUFFER="${LBUFFER}${(q)selected}"
 	    zle accept-line
 	else
 	    LBUFFER="$INIT_BUFFER"
