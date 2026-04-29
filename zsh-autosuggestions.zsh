@@ -12,6 +12,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX=autosuggest-orig-
 
 #ZSH_AUTOSUGGEST_STRATEGY=default
+source $ZSH/claude-context/plugin.zsh
 ZSH_AUTOSUGGEST_STRATEGY=(claude match_prev_cmd)
 
 # Widgets that clear the suggestion
