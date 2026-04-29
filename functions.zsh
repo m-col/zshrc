@@ -28,6 +28,14 @@ if which ranger &> /dev/null; then
     }
 fi
 
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    command yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd < "$tmp"
+    [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+    rm -f -- "$tmp"
+}
+
 shebang() { # create new file, add shebang, and vim
     touch $1
     chmod +x $1
