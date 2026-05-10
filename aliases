@@ -199,6 +199,7 @@ alias psb='python setup.py -q build'
 alias psi='python setup.py -q install'
 alias psiu='python setup.py -q install --user'
 alias m=make
+alias j=just
 alias mc='make clean'
 alias vimrc='nvim ~/.vim/pack/vim-misc/start/self/plugin/settings.vim'
 check() { pytest -xs --pdbcls pudb.debugger:Debugger $@; }
