@@ -99,7 +99,7 @@ prompt_context() {
 
 
 prompt_dir() {
-    prompt_segment magenta 8 ' %4~ '
+    prompt_segment magenta 7 ' %4~ '
     #dir=$(print -Pn '%3~/')
     #[[ "${(q)dir:0:2}" == '\~/' ]] && dir="%F{12}🏠%F{black}${dir:1}"
     #echo -n " $dir "
