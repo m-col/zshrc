@@ -99,7 +99,7 @@ prompt_context() {
 
 
 prompt_dir() {
-    prompt_segment magenta 10 ' %4~ '
+    prompt_segment magenta 8 ' %4~ '
     #dir=$(print -Pn '%3~/')
     #[[ "${(q)dir:0:2}" == '\~/' ]] && dir="%F{12}🏠%F{black}${dir:1}"
     #echo -n " $dir "
@@ -124,30 +124,6 @@ prompt_virtualenv() {
     fi
 }
 
-
-if $IS_SSH || $IS_DOCKER
-then
-    tmux_following_colour=green
-elif [[ $EUID -eq 0 ]]
-then
-    tmux_following_colour=red
-else
-    tmux_following_colour=magenta
-fi
-if $IS_TMUX
-then
-    #tmux_indicator=$'\ue0b0'
-    tmux_indicator=⬜
-else
-    tmux_indicator=''
-fi
-prompt_tmux() {
-    local SEGMENT_SEPARATOR=''
-    [[ -n "$tmux_indicator" ]] || return 0
-    prompt_segment $tmux_following_colour 11 "$tmux_indicator"
-}
-
-
 export KEYTIMEOUT=1	# reduce delay to 0.1s
 bindkey -v
 prompt_vi(){
@@ -161,7 +137,6 @@ zle -N zle-line-init
 build_prompt() {
     RETVAL=$?
     local SEGMENT_SEPARATOR=$SEGMENT_SEPARATOR_L
-    prompt_tmux
     prompt_context
     prompt_dir
     prompt_mes
